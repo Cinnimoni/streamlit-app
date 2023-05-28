@@ -49,7 +49,10 @@ start = st.sidebar.date_input(
 
 end = st.sidebar.date_input(
     "Select the ending date",
-    datetime.date(2023, 1, 1), min_value = start + datetime.timedelta(timedelta[interval]))
+    datetime.date(2023, 1, 1))
+
+if end < start + datetime.timedelta(timedelta[interval]):
+    raise ValueError('End date cannot be earlier than start date.')
 
 df = yf.download(ticker, start = start, end = end, interval = interval)
 df.index = pd.to_datetime(df.index).strftime("%d-%m-%Y")
@@ -71,7 +74,7 @@ left_column.markdown('<span style="font-size:20px; font-weight:600; letter-spaci
 left_column.dataframe(df, height = 400, use_container_width=True)
 
 with right_column:
-    st_lottie(lottie_money, key="money")
+    st_lottie(lottie_money, key="money", quality = 'high', height = 400)
 
 #creating function
 def calculate_support_resistance(df, rolling_wave_length, num_clusters):
